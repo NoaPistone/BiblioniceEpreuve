@@ -53,11 +53,12 @@ class UserController extends BaseController
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
-
+    
         $user = User::where('email', $validated['email'])->first();
-
+    
         if ($user && Hash::check($validated['password'], $user->mot_de_passe)) {
             $UserSession = [
+                'id_utilisateur' => $user->id_utilisateur, // <-- AJOUT TRÈS IMPORTANT
                 'nom' => $user->nom,
                 'prenom' => $user->prenom,
                 'statut' => $user->statut,
@@ -66,8 +67,10 @@ class UserController extends BaseController
             Session::put('user', $UserSession);
             return redirect('/');
         }
+    
         return back()->withErrors(['email' => 'Identifiants invalides.']);
     }
+    
 
     public function logout()
     {

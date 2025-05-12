@@ -13,11 +13,13 @@ class Commentaire extends Model
     protected $primaryKey = 'id_commentaire'; 
 
     protected $fillable = [
-        'id_ouvrage', 
-        'date_creation', 
+        'id_ouvrage',
+        'id_utilisateur',
+        'note',
         'statut',
-        'note'
+        'avis'
     ];
+    
 
     public $timestamps = false; // Désactiver created_at et updated_at
 
@@ -26,4 +28,10 @@ class Commentaire extends Model
     {
         return $this->belongsTo(Ouvrages::class, 'id_ouvrage');
     }
+
+    public function utilisateur()
+    {
+        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+    }
+    
 }

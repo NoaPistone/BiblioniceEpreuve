@@ -16,6 +16,7 @@
             @if(session('user'))
                 <li><a href="{{ route('reservations.index') }}"><i class="fas fa-calendar-check"></i> Réservations</a></li>
                 <li><a href="{{ route('ouvrages') }}"><i class="fas fa-book"></i> Ouvrages</a></li>
+                <li><a href="{{ route('commentaire.index') }}"><i class="fas fa-comments"></i> Commentaires</a></li>
                 @if(session('user')['role'] === 'gestionnaire')
                     <li><a href="{{ route('auteurs.index') }}"><i class="fas fa-user-pen"></i> Auteurs</a></li>
                     <li><a href="{{ route('users.list') }}"><i class="fas fa-users"></i> Utilisateurs</a></li>

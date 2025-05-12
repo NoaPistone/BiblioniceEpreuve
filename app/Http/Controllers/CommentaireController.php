@@ -12,9 +12,26 @@ class CommentaireController extends Controller
     // Afficher tous les commentaires
     public function index()
     {
-        $commentaires = Commentaire::all();  // Récupère tous les commentaires
-        return view('/commentaire.index', compact('commentaires'));
+        if (session()->has('user')) {
+            $user = session('user');
+    
+            if ($user['role'] === 'gestionnaire') {
+                // Voir tous les commentaires
+                $commentaires = Commentaire::with(['utilisateur', 'ouvrage'])->get();
+            } else {
+                // Utilisateur : ne voit que les commentaires validés
+                $commentaires = Commentaire::with(['utilisateur', 'ouvrage'])
+                    ->where('statut', 'valide')
+                    ->get();
+            }
+        } else {
+            // Pas connecté : ne voit rien
+            $commentaires = collect(); // collection vide
+        }
+    
+        return view('commentaire.index', compact('commentaires'));
     }
+    
 
     // Afficher le formulaire de création d'un commentaire
     public function create()
@@ -29,16 +46,24 @@ class CommentaireController extends Controller
         // Validation des données
         $validated = $request->validate([
             'id_ouvrage' => 'required|exists:ouvrages,id_ouvrage',
-            'statut' => 'required|string',
+            'statut' => 'sometimes|string',
             'note' => 'required|integer|min:1|max:5',
+            'avis' => 'nullable|string|max:1000'
         ]);
-
-        // Création du commentaire
+        
+    
+        // Ajouter l'utilisateur connecté s'il existe
+        if (session()->has('user')) {
+            $validated['id_utilisateur'] = session('user')['id_utilisateur'];
+        }
+    
+        // Création du commentaire avec l'utilisateur
         Commentaire::create($validated);
-
+    
         // Redirection avec un message flash
         return redirect('/commentaires')->with('success', 'Commentaire ajouté avec succès.');
     }
+    
 
     // Afficher le formulaire de modification d'un commentaire
     public function edit($id)

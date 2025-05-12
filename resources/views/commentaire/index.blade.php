@@ -15,9 +15,11 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Utilisateur</th>
                 <th>Ouvrage</th>
                 <th>Statut</th>
                 <th>Note</th>
+                <th>Avis</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -25,9 +27,14 @@
             @foreach ($commentaires as $commentaire)
                 <tr>
                     <td>{{ $commentaire->id_commentaire }}</td>
+                    <td>
+                        {{ $commentaire->utilisateur ? $commentaire->utilisateur->nom : 'Inconnu' }}
+                        {{ $commentaire->utilisateur ? $commentaire->utilisateur->prenom : '' }}
+                    </td>
                     <td>{{ $commentaire->ouvrage ? $commentaire->ouvrage->titre : 'Aucun ouvrage' }}</td>
                     <td>{{ $commentaire->statut }}</td>
                     <td>{{ $commentaire->note }}</td>
+                    <td>{{ $commentaire->avis ?? 'Aucun avis' }}</td>
                     <td>
                         <a href="{{ route('commentaires.edit', $commentaire->id_commentaire) }}" class="btn btn-warning btn-sm">Modifier</a>
                         

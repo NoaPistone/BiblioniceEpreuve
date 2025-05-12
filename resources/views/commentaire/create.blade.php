@@ -50,6 +50,16 @@
                 @enderror
             </div>
 
+            <!-- Champ Avis -->
+            <div class="form-group">
+                <label for="avis">Votre avis</label>
+                <textarea name="avis" id="avis" class="form-control" rows="4" placeholder="Partagez votre avis..."></textarea>
+                    @error('avis')
+                <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+            </div>
+
+
             <!-- Bouton de soumission -->
             <button type="submit" class="btn btn-primary">Enregistrer le commentaire</button>
         </form>
